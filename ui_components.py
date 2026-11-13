@@ -2,11 +2,12 @@ from PyQt6.QtCore import (
     QEasingCurve,
     QParallelAnimationGroup,
     QPropertyAnimation,
+    QSize,
     Qt,
     QTimer,
     pyqtProperty,
 )
-from PyQt6.QtGui import QColor, QPainter, QPainterPath, QPen
+from PyQt6.QtGui import QColor, QFont, QFontMetrics, QPainter, QPainterPath, QPen
 from PyQt6.QtWidgets import QLabel
 
 
@@ -173,6 +174,27 @@ class StrokedLabel(QLabel):
         self._text_scale = scale
         self.update()
 
+    # --- Layout ---
+
+    def sizeHint(self):
+        """Keep every lyric line the same width as the overlay.
+
+        With ``QVBoxLayout.setAlignment(AlignCenter)`` children are sized from
+        their sizeHint. One line wider than the window made the whole layout
+        wider than the overlay, so Qt centred that oversized box instead of the
+        window: the text shifted right and stayed shifted even after short
+        lines came back. A constant width prevents it.
+        """
+        hint = super().sizeHint()
+        parent = self.parentWidget()
+        if parent is not None and parent.width() > 24:
+            return QSize(parent.width() - 24, hint.height())
+        return QSize(hint.width(), hint.height())
+
+    def minimumSizeHint(self):
+        hint = super().minimumSizeHint()
+        return QSize(0, hint.height())
+
     # --- Public API ---
 
     def setStrokeColor(self, color):
@@ -264,7 +286,47 @@ class StrokedLabel(QLabel):
         else:
             self._anim_stage = 0
 
-    # --- Rendering ---
+    # --- Layout / Rendering ---
+
+    def _text_layout(self):
+        """Return (font, x, y, advance, ascent) for a centred, fully visible line.
+
+        Overlong lines are drawn with a proportionally smaller font instead of
+        being clipped at the right edge, so long translated lines stay readable
+        and keep the same centre as short ones.
+        """
+        text = self.text()
+        font = self.font()
+        metrics = QFontMetrics(font)
+        tw = metrics.horizontalAdvance(text)
+        available = max(1, self.width() - 16)
+
+        if tw > available and tw > 0:
+            fitted = QFont(font)
+            # Font metrics are not perfectly linear in point size, so one pass
+            # can still end up a few pixels too wide. Iterate with a small
+            # safety margin until the line fits.
+            for _ in range(4):
+                ratio = (available / tw) * 0.98
+                if ratio >= 1.0:
+                    break
+                point_size = fitted.pointSizeF()
+                if point_size > 0:
+                    fitted.setPointSizeF(max(4.0, point_size * ratio))
+                else:
+                    fitted.setPixelSize(max(6, int(fitted.pixelSize() * ratio)))
+                metrics = QFontMetrics(fitted)
+                tw = metrics.horizontalAdvance(text)
+                if tw <= available:
+                    break
+            font = fitted
+            metrics = QFontMetrics(font)
+            tw = metrics.horizontalAdvance(text)
+
+        th = metrics.ascent()
+        x = (self.width() - tw) / 2
+        y = (self.height() + th - metrics.descent()) / 2
+        return font, x, y, tw, th
 
     def paintEvent(self, event):
         if not self.text():
@@ -274,12 +336,7 @@ class StrokedLabel(QLabel):
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         painter.setOpacity(self._text_opacity)
 
-        metrics = self.fontMetrics()
-        # Calculate base centered position
-        tw = metrics.horizontalAdvance(self.text())
-        th = metrics.ascent()
-        x = (self.width() - tw) / 2
-        y = (self.height() + th - metrics.descent()) / 2
+        font, x, y, tw, th = self._text_layout()
 
         # Transform for Slide and Zoom
         # Calculate center point for transformation
@@ -294,7 +351,7 @@ class StrokedLabel(QLabel):
         painter.translate(-cx, -cy)
 
         path = QPainterPath()
-        path.addText(x, y, self.font(), self.text())
+        path.addText(x, y, font, self.text())
 
         # Draw Stroke
         if self.stroke_enabled:
