@@ -1,0 +1,8 @@
+PyQt6
+# winsdk 1.0.0b10 has no wheel for Python 3.13; 1.0.0b9 ships cp311 wheels.
+winsdk==1.0.0b9
+# Lyrics now come from lyrics_sources.py (LRCLIB / QQ Music / NetEase),
+# so syncedlyrics is no longer required.
+qasync
+keyboard
+requests

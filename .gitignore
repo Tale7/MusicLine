@@ -1,0 +1,38 @@
+# Local runtime state - settings.json may contain a user's AI API key.
+settings.json
+lyrics_cache/
+lyrics.log
+*.log
+
+# Build artefacts (the exe is ~48 MB; publish it via Releases, not git).
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# Virtual environments
+.build-venv/
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Editors / OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Local tooling / secrets
+.workbuddy/
+.env
+.env.*
+!.env.example

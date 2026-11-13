@@ -1,0 +1,70 @@
+MusicLine (fork) - Third-party notices for the prebuilt Windows binary
+========================================================================
+
+LICENSING
+---------
+This is a derivative work (fork) of the upstream project
+https://github.com/joshshiman/karaokebird , not an original work. The
+upstream MIT copyright and permission notice are preserved verbatim in
+LICENSE (Copyright (c) 2025 KaraokeBird Contributors).
+
+The source code of this project is licensed under the MIT License; see
+LICENSE.
+
+This executable bundles PyQt6 and Qt libraries. PyQt6 is available under
+the GNU General Public License version 3 (GPL-3.0-only) or under a
+commercial licence; the GPL build distributed on PyPI is used here.
+Accordingly THIS BINARY DISTRIBUTION IS OFFERED UNDER GPL-3.0. A full copy
+of that licence is included as LICENSE-GPLv3.txt.
+
+The MIT-licensed parts remain MIT-licensed when used on their own (MIT is
+GPL-compatible); receiving this combined binary additionally gives you all
+rights described in GPL-3.0 for the work as a whole.
+
+CORRESPONDING SOURCE
+--------------------
+The complete corresponding source for this build, including every script
+needed to reproduce it, is published in the GitHub repository at the commit
+or tag matching this Release:
+
+    https://github.com/Tale7/MusicLine
+
+To rebuild from source:
+
+    Python 3.11 (winsdk ships prebuilt wheels for this version)
+    pip install -r requirements.txt
+    pip install pyinstaller
+    build_exe.bat          # or: pyinstaller MusicLine.spec
+
+Third-party components and where their source can be obtained:
+
+    PyQt6 / Qt          https://pypi.org/project/PyQt6/  |  https://www.qt.io/
+    winsdk              https://pypi.org/project/winsdk/
+    qasync              https://pypi.org/project/qasync/
+    keyboard            https://pypi.org/project/keyboard/
+    requests            https://pypi.org/project/requests/
+    certifi             https://pypi.org/project/certifi/
+    PyInstaller         https://pypi.org/project/pyinstaller/
+    Python 3.11         https://www.python.org/
+
+Version pins are recorded in requirements.txt. The PyInstaller bootloader
+is used under its own GPL-with-exception licence.
+
+Documentation for this build is shipped alongside this notice as
+README.md (English) and README.zh-CN.md (简体中文).
+
+THIRD-PARTY SERVICES AND CONTENT
+--------------------------------
+Lyrics are fetched at runtime from LRCLIB, QQ Music and NetEase Cloud Music.
+Translation uses Microsoft Bing, Google Translate, MyMemory, or an endpoint
+that the user configures themselves. These are independent services subject
+to their own terms of use; this project is not affiliated with any of them.
+No API key or account credential is bundled with this binary. Baidu Translate
+is not used.
+
+Lyrics are copyrighted works. They are cached only on the local machine for
+playback and are NOT distributed with this binary or with the source tree.
+
+The application icon (MusicLineLogo.png / MusicLine.ico) is supplied by
+this fork's maintainer; it is not the upstream bird logo. The upstream
+copyright notice in LICENSE applies to the code, not to this icon.
