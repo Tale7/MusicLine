@@ -108,19 +108,9 @@ This repository is a **fork / derivative work** of [joshshiman/karaokebird](http
 
 ## ⚠️ Third-party services & content
 
-- Lyrics are fetched at runtime from **LRCLIB**, **QQ Music** and **NetEase Cloud Music**; translation uses **Microsoft Bing**, **Google Translate**, **MyMemory** or a user-supplied OpenAI-compatible endpoint. These are third-party services (some undocumented), may change or rate-limit at any time, and are subject to their own terms. This project is not affiliated with any of them. **Baidu Translate is deliberately not used.**
-- Lyrics are copyrighted works. They are cached **locally on the user's machine** only, and no lyric text is committed here or bundled in releases. Never add `lyrics_cache/` to git.
+- Lyrics are fetched at runtime from **LRCLIB**, **QQ Music** and **NetEase Cloud Music**; translation uses **Microsoft Bing**, **Google Translate**, **MyMemory** or a user-supplied OpenAI-compatible endpoint. These are third-party services (some undocumented), may change or rate-limit at any time, and are subject to their own terms. This project is not affiliated with any of them. 
 - Lyrics lookup sends the title/artist to the chosen provider; translation sends the current song's lyric lines to the chosen backend. Both are opt-in behaviours documented above.
-- The icon above (a white musical note on blue) is supplied by this fork, not the upstream bird logo; the upstream code copyright and licence notice remain verbatim in `LICENSE`.
 
-## Publishing checklist
-
-- [x] Repository URLs already point to `Tale7` / `v1.0.0`.
-- [ ] Optionally add your own copyright line in `LICENSE` **below** the original one — never remove the original.
-- [ ] Check `git status` shows no `settings.json`, `lyrics_cache/`, `lyrics.log`, `dist/*.exe` or `.build-venv/`.
-- [ ] Attach `dist/MusicLine-win64.zip` (or the bare exe plus the licence notice) to the Release; rebuild the zip after any source change.
-- [ ] Keep `README.md` and `README.zh-CN.md` in sync when editing either one.
-- [ ] Keep `MusicLineLogo.png` / `MusicLine.ico` and the upstream credit intact.
 
 # 🌐 Multi-language interface
 
@@ -143,7 +133,7 @@ Open **Settings → Translation** to configure it.
 - **From / To** choose source and target languages (24 built-in; `Auto detect` is the default source, 简体中文 the default target).
 - **Translation Size / Translation Color** style the translated line independently from the original lyric.
 - **Engine** selects the backend:
-  - `Built-in (Bing > Google > MyMemory)` — the default. Free, no API key, no account. It requests **Microsoft Bing** first and falls back to **Google Translate** and then **MyMemory** if an endpoint is unreachable. **Baidu Translate is deliberately not used anywhere.**
+  - `Built-in (Bing > Google > MyMemory)` — the default. Free, no API key, no account. It requests **Microsoft Bing** first and falls back to **Google Translate** and then **MyMemory** if an endpoint is unreachable. 
   - `Microsoft Bing (free, no key)` / `Google Translate (free, no key)` / `MyMemory (free, no key)` — force one specific free engine.
   - `Custom AI API` — use your own model instead.
 - **Custom AI API** accepts any OpenAI-compatible `/chat/completions` endpoint: OpenAI, DeepSeek, Moonshot, Ollama, LM Studio, one-api, etc. Fill in **API Base URL** (e.g. `https://api.openai.com/v1`), **API Key** and **Model**, then press **Test Connection** — it translates a sample sentence and reports success or the backend error without saving anything. Local endpoints (localhost / 127.0.0.1) bypass the system proxy automatically.
